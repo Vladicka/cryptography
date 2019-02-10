@@ -1,33 +1,36 @@
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
+#include <locale>
+#include <windows.h>
 #include <stdio.h>
 using namespace std;
 
+void random(char A[5][5]);
 void print(char A[5][5]);
-void decrypt();
-char sq1[5][5]={{'n','d','s','k','v'},{'c','f','m','w','h'},{'i','a','g','r','l'},{'p','e','q','o','x'},{'b','j','t','u','y'}};
-char sq2[5][5]={{'u','t','w','p','n'},{'y','k','e','s','a'},{'c','h','l','r','g'},{'d','o','q','m','i'},{'b','j','x','f','v'}};
-char sq3[5][5]={{'v','y','a','p','n'},{'h','g','s','q','o'},{'x','k','b','i','m'},{'e','t','c','l','j'},{'r','f','d','u','w'}};
-char sq4[5][5]={{'d','s','q','o','y'},{'t','p','m','a','j'},{'r','w','x','i','e'},{'k','u','c','h','n'},{'v','l','f','g','b'}};
+char sq1[5][5]={{'þ','à','á','ö','ä'},{'å','ô','ã','õ','é'},{'ê','ë','ì','í','î'},{'ï','ÿ','ð','ñ','ò'},{'æ','â','ü','ù','ú'}};
+char sq2[5][5]={{'þ','à','á','ù','ä'},{'å','ô','ã','õ','é'},{'ê','ø','ì','í','î'},{'ï','ÿ','ð','÷','ò'},{'ó','û','ü','ý','ú'}};
+char sq3[5][5]={{'þ','à','á','ö','ä'},{'å','ý','ã','è','é'},{'ê','ë','ì','í','û'},{'ï','ÿ','ð','ñ','ò'},{'æ','â','ü','ç','ú'}};
+char sq4[5][5]={{'þ','à','á','ö','ä'},{'å','ô','ã','õ','é'},{'ê','ë','ì','í','î'},{'ï','ÿ','ð','ñ','ò'},{'æ','â','ü','ù','ú'}};
 
 int main()
 {
     srand((time(NULL)));
-    bool f;
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    setlocale( LC_ALL,"Russian" );
     short int i,j,k,s,x1,x2,y1,y2;
     string input;
+    random(sq1);
+    random(sq2);
+    random(sq3);
+    random(sq4);
     print(sq1);
     print(sq2);
     print(sq3);
     print(sq4);
-    cout << "Enter your message: ";
     getline(std::cin, input);
-    for (i=0;i<input.size();i++){
-        if (input[i]== ' ') input.erase(i,1);
-    }
     s=input.size();
-    if (s%2!=0) f=true;
     for (k=0;k<s;k=k+2){
         for (i=0;i<5;i++){
             for (j=0;j<5;j++){
@@ -44,12 +47,25 @@ int main()
         input[k]=sq3[x1][y1];
         input[k+1]=sq2[x2][y2];
     }
-    if (f) input.erase(s,1);
     cout << input << "\n";
-    decrypt();
     system("pause");
 }
 
+void random(char A[5][5])
+{
+    short int i,j,k,l,m;
+    char c;
+    for (k=0;k<101;k++){
+        i=rand() % 5;
+        j=rand() % 5;
+        l=rand() % 5;
+        m=rand() % 5;
+        c=A[i][j];
+        //cout << i << ","<< j << A[i][j] << "; " << l << "," << m << "; ";
+        A[i][j]=A[l][m];
+        A[l][m]=c;
+    }
+}
 void print(char A[5][5]){
     short int i,j;
     for (i=0;i<5;i++){
@@ -59,29 +75,4 @@ void print(char A[5][5]){
         cout << "\n";
     }
     cout << "\n";
-}
-
-void decrypt(){
-    string input;
-    short int i,j,k,l,x1,x2,y1,y2;
-    cout << "Enter encrypted message: ";
-    getline(cin,input);
-    l=input.size();
-    for (k=0;k<l;k=k+2){
-        for (i=0;i<5;i++){
-            for (j=0;j<5;j++){
-                if (input[k]==sq3[i][j]){
-                    x2=j;
-                    y1=i;
-                }
-                if (input[k+1]==sq2[i][j]){
-                    x1=j;
-                    y2=i;
-                }
-            }
-        }
-        input[k]=sq1[x1][y1];
-        input[k+1]=sq4[x2][y2];
-    }
-    cout << input << "\n";
 }
